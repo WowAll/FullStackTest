@@ -29,7 +29,6 @@ services:
     restart: always
     ports:
       - "4000:4000"
-      - "5555:5555" # Prisma Studio
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-nestdb}
       PORT: 4000
