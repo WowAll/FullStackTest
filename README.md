@@ -83,6 +83,7 @@ npm run dev
 - **Frontend**: Next.js, React, JavaScript
 - **Backend**: NestJS, TypeScript, Prisma ORM
 - **Database**: PostgreSQL 15
+- **Admin Tools**: Adminer (PostgreSQL GUI)
 - **DevOps**: Docker, Docker Compose
 
 ## 📖 상세 문서
@@ -91,11 +92,12 @@ npm run dev
 - [Backend README](./backend/README.md)
 - [Frontend README](./frontend/README.md)
 
-## 🔗 API Endpoints
+## 🔗 서비스 접속
 
-- Backend API: http://localhost:4000
-- Frontend: http://localhost:3000
-- PostgreSQL: localhost:5432
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:4000
+- **Adminer (DB 관리)**: http://localhost:8080
+- **PostgreSQL**: localhost:5432
 
 ## 🧪 개발 환경
 
@@ -110,7 +112,11 @@ docker-compose restart backend
 docker exec -it nextjs_frontend sh
 docker exec -it nestjs_backend sh
 
-# Prisma Studio (Docker 내부)
-docker exec -it nestjs_backend npx prisma studio
+# Adminer - PostgreSQL GUI (이미 실행 중)
+# 브라우저에서 http://localhost:8080 접속
+# 로그인: 시스템=PostgreSQL, 서버=db, 사용자=postgres, 비밀번호=postgres, DB=nestdb
+
+# Prisma Studio (수동 실행)
+docker exec -it nestjs_backend npx prisma studio --port 5555
 # 브라우저에서 http://localhost:5555 접속
 ```
