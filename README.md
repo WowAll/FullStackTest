@@ -80,7 +80,7 @@ npm run dev
 
 ## 🛠️ 기술 스택
 
-- **Frontend**: Next.js, React, TypeScript
+- **Frontend**: Next.js, React, JavaScript
 - **Backend**: NestJS, TypeScript, Prisma ORM
 - **Database**: PostgreSQL 15
 - **DevOps**: Docker, Docker Compose
