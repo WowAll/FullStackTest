@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import {
@@ -11,20 +13,30 @@ import {
     FormInput,
     SubmitButton
 } from '@/components/auth';
+import { loginSchema } from '@/lib/schemas';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const login = useLogin();
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+    });
+
+    const onSubmit = async (data) => {
         setError('');
         try {
-            await login.mutateAsync({ email, password });
-            router.push('/boards');
+            await login.mutateAsync(data);
+            router.push('/posts');
         } catch (err) {
             setError(err.message || 'Login failed');
         }
@@ -40,15 +52,15 @@ export default function LoginPage() {
             >
                 <ErrorMessage message={error} />
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <FormInput
                         id="email"
                         label="Email"
                         type="email"
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
+                        error={errors.email?.message}
+                        {...register('email')}
                     />
 
                     <FormInput
@@ -56,13 +68,13 @@ export default function LoginPage() {
                         label="Password"
                         type="password"
                         required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
+                        error={errors.password?.message}
+                        {...register('password')}
                     />
 
                     <SubmitButton
-                        isLoading={login.isPending}
+                        isLoading={login.isPending || isSubmitting}
                         loadingText="Signing in..."
                     >
                         Sign In

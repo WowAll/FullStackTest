@@ -1,4 +1,4 @@
-import PostCard from "@/components/board/PostCard";
+import PostCard from "@/components/post/PostCard";
 
 // 임시 더미 데이터
 const DUMMY_POSTS = Array.from({ length: 8 }).map((_, i) => ({

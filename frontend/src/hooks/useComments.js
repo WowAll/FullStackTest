@@ -1,12 +1,14 @@
+'use client';
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 
 // 게시물의 댓글 목록
-export function useComments(boardId) {
+export function useComments(postId) {
     return useQuery({
-        queryKey: ['comments', boardId],
-        queryFn: () => api.get(`/boards/${boardId}/comments`),
-        enabled: !!boardId,
+        queryKey: ['comments', postId],
+        queryFn: () => api.get(`/posts/${postId}/comments`),
+        enabled: !!postId,
     });
 }
 
@@ -15,9 +17,9 @@ export function useCreateComment() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ boardId, content }) => api.post(`/boards/${boardId}/comments`, { content }),
+        mutationFn: ({ postId, content }) => api.post(`/posts/${postId}/comments`, { content }),
         onSuccess: (data, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['comments', variables.boardId] });
+            queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
         },
     });
 }
@@ -27,9 +29,9 @@ export function useUpdateComment() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, content, boardId }) => api.patch(`/comments/${id}`, { content }),
+        mutationFn: ({ id, content, postId }) => api.patch(`/comments/${id}`, { content }),
         onSuccess: (data, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['comments', variables.boardId] });
+            queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
         },
     });
 }
@@ -39,9 +41,9 @@ export function useDeleteComment() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, boardId }) => api.delete(`/comments/${id}`),
+        mutationFn: ({ id, postId }) => api.delete(`/comments/${id}`),
         onSuccess: (data, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['comments', variables.boardId] });
+            queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
         },
     });
 }

@@ -1,5 +1,8 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuthStore from '@/stores/useAuthStore';
+import { api } from '@/lib/api';
 
 // 회원가입
 export function useSignup() {
@@ -8,21 +11,10 @@ export function useSignup() {
 
     return useMutation({
         mutationFn: async ({ email, password, name }) => {
-            const res = await fetch('/api/auth/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, name }),
-            });
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message || 'Signup failed');
-            }
-            return res.json();
+            return api.post('/auth/signup', { email, password, name });
         },
-        onSuccess: (response) => {
-            // Handle both wrapped {data: ...} and unwrapped responses
-            const result = response.data ?? response;
-            setAuth(result.user, result.access_token);
+        onSuccess: (result) => {
+            setAuth(result.user);
             queryClient.invalidateQueries();
         },
     });
@@ -35,31 +27,29 @@ export function useLogin() {
 
     return useMutation({
         mutationFn: async ({ email, password }) => {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message || 'Login failed');
-            }
-            return res.json();
+            return api.post('/auth/login', { email, password });
         },
-        onSuccess: (response) => {
-            // Handle both wrapped {data: ...} and unwrapped responses
-            const result = response.data ?? response;
-            setAuth(result.user, result.access_token);
+        onSuccess: (result) => {
+            setAuth(result.user);
             queryClient.invalidateQueries();
         },
     });
 }
 
-// 로그아웃
+// 로그아웃 (API 호출 추가)
 export function useLogout() {
-    return () => {
-        useAuthStore.getState().logout();
-    };
+    const queryClient = useQueryClient();
+    const logout = useAuthStore((state) => state.logout);
+
+    return useMutation({
+        mutationFn: async () => {
+            return api.post('/auth/logout', {});
+        },
+        onSuccess: () => {
+            logout();
+            queryClient.clear();
+        },
+    });
 }
 
 // 현재 유저 정보
@@ -69,12 +59,6 @@ export function useCurrentUser() {
 
 // 인증 여부
 export function useIsAuthenticated() {
-    const token = useAuthStore((state) => state.token);
     const user = useAuthStore((state) => state.user);
-    return !!token && !!user;
-}
-
-// 토큰
-export function useToken() {
-    return useAuthStore((state) => state.token);
+    return !!user;
 }

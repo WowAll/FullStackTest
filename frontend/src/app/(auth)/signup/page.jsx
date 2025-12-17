@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useSignup } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import {
@@ -11,21 +13,32 @@ import {
     FormInput,
     SubmitButton
 } from '@/components/auth';
+import { signupSchema } from '@/lib/schemas';
 
 export default function SignupPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
     const [error, setError] = useState('');
     const signup = useSignup();
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: zodResolver(signupSchema),
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        },
+    });
+
+    const onSubmit = async ({ name, email, password }) => {
         setError('');
         try {
-            await signup.mutateAsync({ email, password, name });
-            router.push('/boards');
+            await signup.mutateAsync({ name, email, password });
+            router.push('/posts');
         } catch (err) {
             setError(err.message || 'Signup failed');
         }
@@ -41,15 +54,15 @@ export default function SignupPage() {
             >
                 <ErrorMessage message={error} />
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <FormInput
                         id="name"
                         label="Name"
                         type="text"
                         required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
+                        error={errors.name?.message}
+                        {...register('name')}
                     />
 
                     <FormInput
@@ -57,9 +70,9 @@ export default function SignupPage() {
                         label="Email"
                         type="email"
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
+                        error={errors.email?.message}
+                        {...register('email')}
                     />
 
                     <div>
@@ -68,15 +81,25 @@ export default function SignupPage() {
                             label="Password"
                             type="password"
                             required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
+                            error={errors.password?.message}
+                            {...register('password')}
                         />
                         <p className="mt-2 text-xs text-gray-500">Must be at least 6 characters</p>
                     </div>
 
+                    <FormInput
+                        id="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        error={errors.confirmPassword?.message}
+                        {...register('confirmPassword')}
+                    />
+
                     <SubmitButton
-                        isLoading={signup.isPending}
+                        isLoading={signup.isPending || isSubmitting}
                         loadingText="Creating account..."
                     >
                         Create Account

@@ -4,8 +4,8 @@ import { useComments, useCreateComment, useUpdateComment, useDeleteComment } fro
 import { useCurrentUser } from '@/hooks/useAuth';
 import { useState } from 'react';
 
-export default function Comments({ boardId }) {
-    const { data: comments, isLoading } = useComments(boardId);
+export default function Comments({ postId, readOnly = false }) {
+    const { data: comments, isLoading } = useComments(postId);
     const createComment = useCreateComment();
     const updateComment = useUpdateComment();
     const deleteComment = useDeleteComment();
@@ -20,7 +20,7 @@ export default function Comments({ boardId }) {
         if (!newComment.trim()) return;
 
         try {
-            await createComment.mutateAsync({ boardId, content: newComment });
+            await createComment.mutateAsync({ postId, content: newComment });
             setNewComment('');
         } catch (err) {
             alert('Failed to create comment');
@@ -31,7 +31,7 @@ export default function Comments({ boardId }) {
         if (!editContent.trim()) return;
 
         try {
-            await updateComment.mutateAsync({ id, content: editContent, boardId });
+            await updateComment.mutateAsync({ id, content: editContent, postId });
             setEditingId(null);
             setEditContent('');
         } catch (err) {
@@ -43,7 +43,7 @@ export default function Comments({ boardId }) {
         if (!confirm('Delete this comment?')) return;
 
         try {
-            await deleteComment.mutateAsync({ id, boardId });
+            await deleteComment.mutateAsync({ id, postId });
         } catch (err) {
             alert('Failed to delete comment');
         }
@@ -65,8 +65,8 @@ export default function Comments({ boardId }) {
                 Comments {comments && `(${comments.length})`}
             </h3>
 
-            {/* Create Comment Form - 로그인 시에만 표시 */}
-            {currentUser ? (
+            {/* Create Comment Form - readOnly가 아니고 로그인 시에만 표시 */}
+            {!readOnly && currentUser ? (
                 <form onSubmit={handleCreate} className="mb-6">
                     <textarea
                         value={newComment}
@@ -85,7 +85,7 @@ export default function Comments({ boardId }) {
                         </button>
                     </div>
                 </form>
-            ) : (
+            ) : !readOnly && (
                 <div className="mb-6 p-4 bg-gray-800/30 border border-gray-700/50 rounded-lg text-center">
                     <p className="text-gray-400">
                         <a href="/login" className="text-purple-400 hover:text-purple-300 font-medium">Sign in</a>
@@ -135,10 +135,10 @@ export default function Comments({ boardId }) {
                                         <div>
                                             <span className="font-medium text-white">{comment.writer.name}</span>
                                             <span className="ml-2 text-xs text-gray-500">
-                                                {new Date(comment.createdAt).toLocaleString()}
+                                                {new Date(comment.createdAt).toISOString().split('T')[0]}
                                             </span>
                                         </div>
-                                        {currentUser && currentUser.id === comment.writerId && (
+                                        {!readOnly && currentUser && currentUser.id === comment.writerId && (
                                             <div className="flex space-x-2">
                                                 <button
                                                     onClick={() => startEdit(comment)}

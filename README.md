@@ -1,25 +1,40 @@
-# DarkApp - 풀스택 웹 애플리케이션
+# PostApp - 모던 풀스택 갤러리 애플리케이션
 
-다크 테마를 적용한 모던 풀스택 웹 애플리케이션. 사용자 인증, 게시물, 댓글 기능 제공.
+다크 테마와 글래스모피즘(Glassmorphism) 디자인이 적용된 **프리미엄 갤러리형 웹 애플리케이션**입니다.
+Next.js(App Router)와 NestJS로 구축되었으며, 모던한 UI와 견고한 백엔드 아키텍처를 자랑합니다.
 
-## 🚀 기술 스택
+![UI Showcase](https://via.placeholder.com/800x400?text=Premium+Dark+UI+Showcase)
 
-### 프론트엔드
-- **프레임워크:** Next.js 14 (App Router)
-- **스타일링:** Tailwind CSS
-- **상태 관리:** React Query
-- **UI 테마:** 다크 모드 + 글래스모피즘
+## 🚀 주요 특징
 
-### 백엔드
-- **프레임워크:** NestJS
-- **데이터베이스:** PostgreSQL
-- **ORM:** Prisma
-- **인증:** JWT (JSON Web Tokens)
+### 🎨 Premium UI/UX
+- **모던 다크 테마**: Slate-900 기반의 깊이감 있는 다크 모드.
+- **글래스모피즘**: `backdrop-blur` 효과를 활용한 투명하고 세련된 카드 디자인.
+- **반응형 그리드 레이아웃**: 게시글을 갤러리 형태(Grid)로 아름답게 배치.
+- **인터랙션**: 부드러운 호버 효과 및 애니메이션 적용.
+- **뷰 모드 분리**:
+    - **목록(List View)**: 수정/삭제 방해 요소가 없는 **순수 갤러리 감상 모드**.
+    - **상세(Detail View)**: 댓글 작성 및 수정/삭제가 가능한 **인터랙션 모드**.
 
-### 인프라
-- **컨테이너화:** Docker & Docker Compose
-- **로드 밸런서:** Nginx
-- **아키텍처:** 마이크로서비스
+### 🛠️ 기술 스택
+
+#### Frontend
+- **Framework**: Next.js 14+ (App Router)
+- **Styling**: Tailwind CSS, CSS Modules
+- **State Management**: React Query (TanStack Query) - **Custom Hooks 패턴 적용**
+- **Authentication**: JWT, Secure Cookies
+
+#### Backend
+- **Framework**: NestJS (Modular Architecture)
+- **Database**: PostgreSQL
+- **ORM**: Prisma (Auto-generated Type-safe Client)
+- **API Docs**: Swagger (Auto-generated)
+- **Security**: BCrypt hashing, Guards, Interceptors
+
+#### Infrastructure
+- **Container**: Docker, Docker Compose
+- **Proxy/LB**: Nginx
+- **Availability**: Health Checks implemented
 
 ---
 
@@ -27,379 +42,109 @@
 
 ```
 ReactPage/
-├── frontend/              # Next.js 애플리케이션
-│   ├── src/
-│   │   ├── app/          # App Router 페이지
-│   │   ├── components/   # React 컴포넌트
-│   │   ├── hooks/        # 커스텀 훅
-│   │   └── lib/          # 유틸리티
-│   └── Dockerfile
-├── backend/              # NestJS 애플리케이션
-│   ├── src/
-│   │   ├── modules/      # 기능 모듈
-│   │   ├── prisma/       # 데이터베이스 서비스
-│   │   ├── common/       # 공통 리소스
-│   │   └── config/       # 설정
-│   ├── prisma/           # 데이터베이스 스키마
-│   └── Dockerfile
-├── nginx/                # Nginx 설정
-└── docker-compose.lb.yml # Docker 오케스트레이션
+├── frontend/              # Next.js 클라이언트
+│   ├── src/app/          # App Router 페이지
+│   ├── src/components/   # 재사용 가능한 UI 컴포넌트
+│   ├── src/hooks/        # 비즈니스 로직 (Custom Hooks)
+│   └── src/lib/          # 유틸리티 (API Fetcher 등)
+├── backend/              # NestJS 서버
+│   ├── src/modules/      # 기능 모듈 (Posts, Auth, Users 등)
+│   ├── prisma/           # DB 스키마 및 마이그레이션
+│   └── test/             # E2E 테스트
+├── nginx/                # 리버스 프록시 설정
+└── docker-compose.lb.yml # 프로덕션용 오케스트레이션
 ```
 
 ---
 
-## 🎨 주요 기능
+## 🚀 빠른 시작 (Quick Start)
 
-### 인증
-- ✅ 이메일/비밀번호 회원가입
-- ✅ JWT 기반 로그인
-- ✅ bcrypt 비밀번호 해싱
-- ✅ 보호된 라우트
-- ✅ 자동 토큰 관리
+Docker 하나로 전체 스택을 즉시 실행할 수 있습니다.
 
-### 게시물 (Boards)
-- ✅ 게시물 생성, 조회, 수정, 삭제
-- ✅ 조회수 카운터
-- ✅ 사용자별 게시물 관리 ("내 게시물")
-- ✅ 리치 텍스트 콘텐츠 지원
-
-### 댓글
-- ✅ 게시물에 댓글 작성
-- ✅ 본인 댓글 수정/삭제
-- ✅ 작성자 정보 표시
-- ✅ 실시간 업데이트
-
-### UI/UX
-- ✅ 모던 다크 테마
-- ✅ 그라데이션 배경
-- ✅ 글래스모피즘 효과
-- ✅ 부드러운 애니메이션 (blob 효과)
-- ✅ 반응형 디자인
-
----
-
-## 🚀 빠른 시작
-
-### 사전 준비사항
-- Docker & Docker Compose 설치
-- 포트 80, 5432 사용 가능
-
-### 1. 클론 & 설정
-
+### 1. 실행
 ```bash
-git clone <repository>
-cd ReactPage
+# Nginx를 포함한 풀스택 실행 (권장)
+docker-compose -f docker-compose.lb.yml up --build -d
 ```
 
-### 2. 환경 변수
-
-환경 변수 파일 생성:
-
-**백엔드** (`backend/.env`):
-```env
-DATABASE_URL="postgresql://postgres:postgres@db:5432/nestdb"
-JWT_SECRET="your-super-secret-jwt-key-change-in-production"
-PORT=4000
-NODE_ENV=development
-```
-
-**프론트엔드** (`frontend/.env.local`):
-```env
-NEXT_PUBLIC_API_URL=http://localhost
-```
-
-### 3. 서비스 시작
-
-#### 🚀 방법 1: Production 스타일 (Nginx 포함) - **추천**
-
-Nginx 로드밸런서를 사용한 실제 배포 환경과 유사한 구조입니다.
-
-```bash
-docker-compose -f docker-compose.lb.yml up -d
-```
-
-**접속:**
-- 전체 애플리케이션: http://localhost
-- Frontend: http://localhost (자동 라우팅)
-- Backend API: http://localhost/api (자동 라우팅)
-
-**특징:**
-- ✅ 하나의 포트(80)로 모든 서비스 접근
-- ✅ CORS 문제 없음
-- ✅ Production 환경과 동일한 구조
-- ✅ Nginx 리버스 프록시 사용
-
----
-
-#### 🔧 방법 2: 개발 모드 (직접 접근)
-
-각 서비스를 독립적으로 직접 접근하는 간단한 구조입니다.
-
-```bash
-docker-compose up -d
-```
-
-**접속:**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:4000
-- Database: localhost:5432
-
-**특징:**
-- ✅ 간단한 구조
-- ✅ 각 서비스 독립적 테스트 가능
-- ✅ 디버깅 편리
-- ⚠️ CORS 설정 필요 (이미 적용됨)
-
----
-
-> **💡 권장:** 실제 배포 환경과 유사한 **방법 1 (docker-compose.lb.yml)** 사용을 권장합니다.
-
-### 4. 데이터베이스 마이그레이션
-
-```bash
-docker exec nestjs_backend npx prisma migrate deploy
-```
-
-### 5. 애플리케이션 접속
-
-- **프론트엔드:** http://localhost
-- **백엔드 API:** http://localhost/api
-- **헬스 체크:** http://localhost/api/health
+### 2. 접속
+- **Web App**: http://localhost
+- **API Docs**: http://localhost/docs
+- **Prisma Studio**: `docker exec -it nestjs_backend npx prisma studio` (localhost:5555)
 
 ---
 
 ## 📝 API 엔드포인트
 
-### 인증
-```
-POST /api/auth/signup      # 회원가입
-POST /api/auth/login       # 로그인
-```
+모든 API는 `/posts` 리소스를 중심으로 설계되었습니다.
 
-### 사용자
-```
-GET  /api/users/me         # 현재 사용자 조회 (보호됨)
-```
+### Posts (게시글)
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| `GET` | `/posts` | 전체 게시글 목록 (Pagination) | Public |
+| `GET` | `/posts/:id` | 게시글 상세 조회 | Public |
+| `POST` | `/posts` | 새 게시글 작성 | **User** |
+| `PATCH` | `/posts/:id` | 게시글 수정 | **Owner** |
+| `DELETE` | `/posts/:id` | 게시글 삭제 | **Owner** |
 
-### 게시물
-```
-GET  /api/boards/me        # 내 게시물 목록 (보호됨)
-POST /api/boards           # 게시물 작성 (보호됨)
-PATCH /api/boards/:id      # 게시물 수정 (보호됨)
-DELETE /api/boards/:id     # 게시물 삭제 (보호됨)
-```
-
-### 댓글
-```
-GET  /api/boards/:boardId/comments  # 댓글 목록 조회
-POST /api/boards/:boardId/comments  # 댓글 작성 (보호됨)
-PATCH /api/comments/:id             # 댓글 수정 (보호됨)
-DELETE /api/comments/:id            # 댓글 삭제 (보호됨)
-```
+### Comments (댓글)
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| `GET` | `/posts/:postId/comments` | 댓글 목록 조회 | Public |
+| `POST` | `/posts/:postId/comments` | 댓글 작성 | **User** |
 
 ---
 
 ## 🗄️ 데이터베이스 스키마
 
+**Post** 모델을 중심으로 **User**와 **Comment**가 관계를 맺고 있습니다.
+
 ```prisma
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  password  String
-  name      String?
-  boards    Board[]
+  posts     Post[]   // 1:N Relation
   comments  Comment[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
-model Board {
+model Post {
   id        Int      @id @default(autoincrement())
   title     String
   content   String   @db.Text
-  writerId  Int
-  writer    User     @relation(...)
+  thumbnail String?  // 썸네일 이미지 URL
+  writer    User     @relation(fields: [writerId], references: [id])
   comments  Comment[]
   views     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String   @db.Text
-  boardId   Int
-  board     Board    @relation(...)
-  writerId  Int
-  writer    User     @relation(...)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id])
+  writer    User     @relation(fields: [writerId], references: [id])
 }
 ```
 
 ---
 
-## 🛠️ 개발 가이드
+## 👨‍💻 개발 가이드
 
-### 로컬에서 실행 (Docker 없이)
+### 커스텀 훅 (Hooks) 패턴
+이 프로젝트는 UI와 비즈니스 로직을 철저히 분리합니다. 컴포넌트 내에서 직접 `fetch`를 호출하지 마세요.
 
-**백엔드:**
-```bash
-cd backend
-npm install
-npx prisma generate
-npx prisma migrate dev
-npm run start:dev
+**Bad:**
+```javascript
+// ❌ 컴포넌트에 로직 혼재
+useEffect(() => { fetch('/api/posts')... }, []);
 ```
 
-**프론트엔드:**
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Prisma Studio (데이터베이스 GUI)
-
-```bash
-docker exec -it nestjs_backend npx prisma studio
-```
-
-접속: http://localhost:5555
-
----
-
-## 🎯 사용 방법
-
-### 1. 회원가입
-- http://localhost/signup 접속
-- 이메일, 비밀번호, 이름 입력
-- "Create Account" 클릭
-
-### 2. 로그인
-- http://localhost/login 접속
-- 계정 정보 입력
-- "내 게시물" 페이지로 자동 이동
-
-### 3. 게시물 작성
-- "+ New Post" 버튼 클릭
-- 제목과 내용 입력
-- "Create Post" 클릭
-
-### 4. 댓글 작성
-- 게시물의 "💬 Comments" 클릭
-- 댓글 입력
-- "Post Comment" 클릭
-
----
-
-## 🐳 Docker 명령어
-
-### Production 스타일 (Nginx 포함)
-
-```bash
-# 서비스 시작
-docker-compose -f docker-compose.lb.yml up -d
-
-# 서비스 중지
-docker-compose -f docker-compose.lb.yml down
-
-# 로그 확인
-docker-compose -f docker-compose.lb.yml logs -f
-
-# 특정 서비스 재시작
-docker-compose -f docker-compose.lb.yml restart backend
-docker-compose -f docker-compose.lb.yml restart frontend
-
-# 모든 데이터 삭제 (주의!)
-docker-compose -f docker-compose.lb.yml down -v
-```
-
-### 개발 모드 (직접 접근)
-
-```bash
-# 서비스 시작
-docker-compose up -d
-
-# 서비스 중지
-docker-compose down
-
-# 로그 확인
-docker-compose logs -f
-
-# 특정 서비스 재시작
-docker-compose restart backend
-docker-compose restart frontend
+**Good:**
+```javascript
+// ✅ 훅을 통한 로직 위임
+const { data: posts } = useAllPosts();
 ```
 
 ---
 
-## 🔒 보안 기능
-
-- ✅ bcrypt 비밀번호 해싱 (cost: 10)
-- ✅ JWT 토큰 기반 인증
-- ✅ 가드를 통한 API 엔드포인트 보호
-- ✅ 모든 입력값 DTO 검증
-- ✅ API 응답에서 비밀번호 제외
-- ✅ CORS 설정
-- ✅ SQL 인젝션 방지 (Prisma)
-
----
-
-## 📦 주요 패키지
-
-### 백엔드
-- `@nestjs/core` - NestJS 프레임워크
-- `@nestjs/jwt` - JWT 인증
-- `@prisma/client` - 데이터베이스 ORM
-- `bcrypt` - 비밀번호 해싱
-- `class-validator` - 입력값 검증
-- `class-transformer` - DTO 변환
-
-### 프론트엔드
-- `next` - React 프레임워크
-- `@tanstack/react-query` - 데이터 페칭
-- `tailwindcss` - 스타일링
-
----
-
-## 🎨 디자인 시스템
-
-### 색상 팔레트
-- **배경:** Gray-900, Slate-900, Black
-- **그라데이션:** Purple-600 → Blue-600
-- **카드:** Gray-800/50 (반투명)
-- **텍스트:** Gray-300, Gray-400
-- **강조:** Purple-400, Blue-400
-
-### 효과
-- `backdrop-blur-xl`을 사용한 글래스모피즘
-- 그라데이션 섀도우
-- Blob 애니메이션
-- 부드러운 트랜지션
-
----
-
-## 🚧 향후 개선 사항
-
-- [ ] 리프레시 토큰 구현
-- [ ] 비밀번호 재설정 기능
-- [ ] 아바타가 있는 사용자 프로필
-- [ ] 게시물 카테고리/태그
-- [ ] 검색 기능
-- [ ] 페이지네이션
-- [ ] 좋아요/싫어요 시스템
-- [ ] 실시간 알림
-- [ ] 파일 업로드 지원
-
----
-
-## 📄 라이선스
-
-MIT
-
----
-
-## 👨‍💻 개발자
-
-현대적인 웹 기술로 ❤️를 담아 제작
+## 📜 License
+MIT License

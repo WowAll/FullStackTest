@@ -25,7 +25,7 @@ const buttonVariants = {
     },
 };
 
-export default function BoardsFilter({
+export default function PostsFilter({
     currentFilter,
     onFilterChange,
     filters = [],

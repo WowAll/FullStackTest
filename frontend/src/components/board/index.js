@@ -7,3 +7,7 @@ export { default as BoardCardHeader } from './BoardCardHeader';
 export { default as BoardsEmptyState } from './BoardsEmptyState';
 export { default as BoardsFilter } from './BoardsFilter';
 export { default as BoardsHeader } from './BoardsHeader';
+export { default as BoardForm } from './BoardForm';
+export { default as BoardsClient } from './BoardsClient';
+export { default as BoardDetailClient } from './BoardDetailClient';
+export { default as EditBoardClient } from './EditBoardClient';

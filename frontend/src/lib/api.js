@@ -5,23 +5,10 @@ const API_URL =
         ? process.env.NEXT_INTERNAL_API_URL
         : process.env.NEXT_PUBLIC_API_URL;
 
-function getAuthHeaders() {
-    const headers = { 'Content-Type': 'application/json' };
-
-    if (typeof window !== 'undefined') {
-        const token = useAuthStore.getState().token;
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-    }
-
-    return headers;
-}
-
 export const api = {
     async get(endpoint) {
         const res = await fetch(`${API_URL}${endpoint}`, {
-            headers: getAuthHeaders(),
+            credentials: 'include',
         });
         if (!res.ok) {
             const errorData = await res.json().catch(() => null);
@@ -32,9 +19,11 @@ export const api = {
     },
 
     async post(endpoint, data) {
+        console.log(`API POST: ${endpoint}`, { credentials: 'include' });
         const res = await fetch(`${API_URL}${endpoint}`, {
             method: 'POST',
-            headers: getAuthHeaders(),
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         });
         if (!res.ok) {
@@ -48,7 +37,8 @@ export const api = {
     async patch(endpoint, data) {
         const res = await fetch(`${API_URL}${endpoint}`, {
             method: 'PATCH',
-            headers: getAuthHeaders(),
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         });
         if (!res.ok) {
@@ -62,7 +52,7 @@ export const api = {
     async delete(endpoint) {
         const res = await fetch(`${API_URL}${endpoint}`, {
             method: 'DELETE',
-            headers: getAuthHeaders(),
+            credentials: 'include',
         });
         if (!res.ok) {
             const errorData = await res.json().catch(() => null);

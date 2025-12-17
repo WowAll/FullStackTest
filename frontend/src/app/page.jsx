@@ -11,7 +11,7 @@ export default function MainPage() {
 
     useEffect(() => {
         if (user) {
-            router.replace('/boards');
+            router.replace('/posts');
         }
     }, [user, router]);
 

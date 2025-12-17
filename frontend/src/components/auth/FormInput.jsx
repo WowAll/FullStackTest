@@ -1,5 +1,7 @@
 'use client';
 
+import { forwardRef } from 'react';
+
 /**
  * 인증 폼용 입력 필드 컴포넌트 (OCP 준수)
  * variant, size로 확장 가능, className으로 스타일 오버라이드 가능
@@ -37,7 +39,7 @@ const labelVariants = {
     outlined: 'text-gray-300',
 };
 
-export default function FormInput({
+const FormInput = forwardRef(function FormInput({
     id,
     label,
     type = 'text',
@@ -49,12 +51,29 @@ export default function FormInput({
     variant = 'default',
     size = 'md',
     className = '',
-    labelClassName = ''
-}) {
+    labelClassName = '',
+    ...rest
+}, ref) {
     const baseInputStyles = 'w-full border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition';
     const variantInputStyles = inputVariants[variant] || inputVariants.default;
     const sizeInputStyles = inputSizes[size] || inputSizes.md;
     const labelStyles = labelVariants[variant] || labelVariants.default;
+    const inputProps = {
+        id,
+        type,
+        required,
+        placeholder,
+        className: `${baseInputStyles} ${variantInputStyles} ${sizeInputStyles} ${className}`,
+        ref,
+        ...rest,
+    };
+
+    if (value !== undefined) {
+        inputProps.value = value;
+    }
+    if (onChange) {
+        inputProps.onChange = onChange;
+    }
 
     return (
         <div>
@@ -66,18 +85,12 @@ export default function FormInput({
                     {label}
                 </label>
             )}
-            <input
-                id={id}
-                type={type}
-                required={required}
-                value={value}
-                onChange={onChange}
-                className={`${baseInputStyles} ${variantInputStyles} ${sizeInputStyles} ${className}`}
-                placeholder={placeholder}
-            />
+            <input {...inputProps} />
             {error && (
                 <p className="mt-1 text-sm text-red-400">{error}</p>
             )}
         </div>
     );
-}
+});
+
+export default FormInput;

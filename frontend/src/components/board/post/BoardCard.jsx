@@ -35,6 +35,13 @@ export default function BoardCard({
                         authorName={board.writer?.name}
                         createdAt={board.createdAt}
                     />
+                    {board.thumbnail && (
+                        <img
+                            src={`${process.env.NEXT_PUBLIC_API_URL}${board.thumbnail}`}
+                            alt={board.title}
+                            className="w-full h-48 object-cover rounded-lg mb-3"
+                        />
+                    )}
                     <BoardCardContent
                         boardId={board.id}
                         title={board.title}

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
  * @param {string} props.filter - 현재 필터 상태 ('all' | 'my')
  * @param {boolean} props.showCreateButton - 작성 버튼 표시 여부
  */
-export default function BoardsEmptyState({
+export default function PostsEmptyState({
     filter = 'all',
     showCreateButton = false
 }) {
@@ -21,7 +21,7 @@ export default function BoardsEmptyState({
             </p>
             {showCreateButton && filter === 'my' && (
                 <button
-                    onClick={() => router.push('/boards/new')}
+                    onClick={() => router.push('/posts/new')}
                     className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-lg shadow-lg shadow-purple-500/50 transition-all"
                 >
                     Create Your First Post
