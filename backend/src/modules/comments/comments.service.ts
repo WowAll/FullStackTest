@@ -22,7 +22,7 @@ export class CommentsService {
                     },
                 },
             },
-            orderBy: { createdAt: 'asc' },
+            orderBy: { createdAt: 'desc' },
         });
 
         return plainToInstance(CommentResponseDto, comments, {
