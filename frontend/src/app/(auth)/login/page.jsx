@@ -1,22 +1,80 @@
-import LoginForm from "@/components/auth/LoginForm";
-import Link from "next/link";
+'use client';
+
+import { useState } from 'react';
+import { useLogin } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import {
+    AuthBackground,
+    AuthCard,
+    AuthLink,
+    ErrorMessage,
+    FormInput,
+    SubmitButton
+} from '@/components/auth';
 
 export default function LoginPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const login = useLogin();
+    const router = useRouter();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        try {
+            await login.mutateAsync({ email, password });
+            router.push('/boards');
+        } catch (err) {
+            setError(err.message || 'Login failed');
+        }
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen px-4">
-            <div className="mb-8 text-center">
-                <h1 className="text-3xl font-bold tracking-tight text-orange-600">Tistory</h1>
-                <p className="text-sm text-gray-600 mt-2">다시 만나서 반가워요!</p>
-            </div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center p-4">
+            <AuthBackground />
 
-            <LoginForm />
+            <AuthCard
+                title="Welcome Back"
+                subtitle="Sign in to your account"
+            >
+                <ErrorMessage message={error} />
 
-            <div className="mt-4 text-center text-sm">
-                계정이 없으신가요?{" "}
-                <Link href="/signup" className="underline hover:text-orange-600">
-                    회원가입
-                </Link>
-            </div>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <FormInput
+                        id="email"
+                        label="Email"
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                    />
+
+                    <FormInput
+                        id="password"
+                        label="Password"
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                    />
+
+                    <SubmitButton
+                        isLoading={login.isPending}
+                        loadingText="Signing in..."
+                    >
+                        Sign In
+                    </SubmitButton>
+                </form>
+
+                <AuthLink
+                    text="Don't have an account?"
+                    linkText="Sign up"
+                    href="/signup"
+                />
+            </AuthCard>
         </div>
     );
 }
