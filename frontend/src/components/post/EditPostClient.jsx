@@ -3,7 +3,7 @@
 import { useUpdatePost } from '@/hooks/usePosts';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '@/stores/useAuthStore';
-import { PostForm } from '@/components/post';
+import { PostEditor } from '@/components/post';
 
 export default function EditPostClient({ post }) {
     const router = useRouter();
@@ -43,30 +43,14 @@ export default function EditPostClient({ post }) {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="max-w-3xl mx-auto">
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                        Edit Post
-                    </h1>
-                    <p className="text-gray-400">Update your post</p>
-                </div>
-
-                {/* API Error Message */}
-                {updatePost.isError && (
-                    <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm">
-                        {updatePost.error?.message || 'Failed to update post'}
-                    </div>
-                )}
-
-                <PostForm
-                    initialValues={post}
-                    onSubmit={onSubmit}
-                    submitLabel="Update Post"
-                    isSubmitting={updatePost.isPending}
-                />
-            </div>
-        </div>
+        <PostEditor
+            title="Edit Post"
+            description="Update your post"
+            initialValues={post}
+            onSubmit={onSubmit}
+            isSubmitting={updatePost.isPending}
+            error={updatePost.error}
+            submitLabel="Update Post"
+        />
     );
 }

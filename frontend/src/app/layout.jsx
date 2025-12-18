@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Dark App",
-  description: "Modern dark themed application",
+  title: "Page",
+  description: "Simple Page",
 };
 
 export default function RootLayout({ children }) {

@@ -16,3 +16,4 @@ export { default as PostsHeader } from './PostsHeader';
 export { default as PostsClient } from './PostsClient';
 export { default as PostDetailClient } from './PostDetailClient';
 export { default as EditPostClient } from './EditPostClient';
+export { default as PostEditor } from './PostEditor';
